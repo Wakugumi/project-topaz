@@ -5,8 +5,21 @@ import IndexPage from './pages/IndexPage'
 import WelcomePage from './pages/WelcomePage'
 import DashboardPage from './pages/DashboardPage'
 import AppPage from './pages/AppPage'
+import { useLayoutEffect } from 'react'
+import globalConfigService from './services/ConfigService'
 
 function App() {
+	
+	useLayoutEffect(() => {
+		const loadConfig = async () => {
+			try {
+				await globalConfigService.loadConfig();
+			} catch (error) {
+				console.error(error);
+			}
+		}
+		loadConfig();
+	}, []);
 
 	return (
 		<>

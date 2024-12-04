@@ -1,3 +1,5 @@
+import config from './config.json';
+
 type ConfigEntry = {
 	name: string;
 	value: string | number | boolean;
@@ -12,13 +14,7 @@ class ConfigService {
 
 	async loadConfig(): Promise<void> {
 		if (!this.config) {
-			try {
-				const response = await fetch('/config.json');
-				this.config = await response.json();
-			} catch (error) {
-				console.error('Failed to load configuration:', error);
-				throw new Error('Could not load configuration.');
-			}
+			this.config = config;
 		}
 	}
 

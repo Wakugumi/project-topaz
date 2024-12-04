@@ -37,7 +37,7 @@ function Sidebar() {
 								<span className="material-symbols-outlined">
 									work
 								</span>
-								Jobs</NavLink>
+								Tasks</NavLink>
 						</li>
 					</ul>
 

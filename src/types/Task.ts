@@ -1,13 +1,13 @@
 import { Token } from "./Token";
 
 export interface Task {
-    Id: string;
-    Title: string;
-    DivisionId: string;
-    SubTaskIds: string[];
-    Status: number;
-    IssueDate: string;
-    Deadline: string;
+    id: string;
+    title: string;
+    divisionId: string;
+    subTaskIds: string[];
+    status: number;
+    issueDate: string;
+    deadline: string;
 }
 
 export interface ReturnTask {

@@ -33,11 +33,20 @@ function Sidebar() {
 					<ul className="nav nav-pills flex-column gap-3">
 						<h4>Management</h4>
 						<li className="nav-item">
-							<NavLink className={({ isActive }) => `d-flex gap-3 p-3 nav-link ${isActive ? "active" : ""}`} to="/app/jobs">
+							<NavLink className={({ isActive }) => `d-flex gap-3 p-3 nav-link ${isActive ? "active" : ""}`} to="/app/tasks">
 								<span className="material-symbols-outlined">
 									work
 								</span>
 								Tasks</NavLink>
+						</li>
+
+
+						<li className="nav-item">
+							<NavLink className={({ isActive }) => `d-flex gap-3 p-3 nav-link ${isActive ? "active" : ""}`} to="/app/workers">
+								<span className="material-symbols-outlined">
+									person_apron
+								</span>
+								Workers</NavLink>
 						</li>
 					</ul>
 

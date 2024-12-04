@@ -2,10 +2,11 @@ import axios from 'axios';
 import api from './APIService';
 import { Token } from '../types/Token';
 import { Login, Worker } from '../types/Worker';
+import { Navigate } from 'react-router-dom';
 
 const AuthService = {
 	async initUser() {
-		api.get("workers/auth").then(resolve => {
+		await api.get("workers/auth").then(resolve => {
 
 			const data: Worker = resolve.data;
 
@@ -23,14 +24,7 @@ const AuthService = {
 	* @returns Promise<Token>
 	**/
 	async login(form: Login): Promise<Token> {
-		console.log(form);
 
-		const payload = {
-			"email": form?.email,
-			"password": form?.password
-		}
-
-		console.log(payload)
 		return axios.post<Token>(import.meta.env.VITE_API_URL + "workers/login", { "email": form?.email, "password": form?.password })
 			.then(resolve => {
 				if (resolve.status == 200) {
@@ -67,13 +61,6 @@ const AuthService = {
 	**/
 	isAuthenticated() {
 		const token = sessionStorage.getItem("token");
-		api.get("workers/auth").then((resolve) => {
-			return true;
-		}).catch(error => {
-			console.error("Checking auth: " + error);
-			return false
-		})
-
 		return token && token !== '';
 
 	},

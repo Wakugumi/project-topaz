@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import AuthService from './AuthService';
 
 
+
 const instance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
 	headers: {
@@ -20,7 +21,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
 	(config) => {
 		const rawToken = sessionStorage.getItem('token');
-		const jsonToken = JSON.parse(rawToken);
+		const jsonToken = JSON.parse(rawToken as string);
 		const token = jsonToken?.IdToken;
 		const refreshToken = jsonToken?.RefreshToken;
 

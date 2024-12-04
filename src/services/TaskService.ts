@@ -46,6 +46,22 @@ const TaskService = {
 			.catch(error => {
 				throw new Error(error || "Unknown error @ TaskService");
 			});
+	},
+
+	/**
+		* Return a single task
+	* @param id string of the task id
+	* @return Task object
+	*/
+	async getTask(id: string | null) {
+		return api.get<Task>("tasks/id?id=" + id)
+			.then(resolve => {
+				return resolve.data;
+			})
+			.catch(error => {
+				throw new Error(error || "Unknown error @ TaskService");
+			});
+
 	}
 
 }

@@ -4,23 +4,22 @@ import subtask from '../../services/SubTaskService';
 
 import api from '../../services/APIService';
 import { Task } from '../../types/Task';
-import { SubTask } from '../../types/SubTask';
-import globalConfigService from "../../services/ConfigService";
-4
+import config from "../../services/ConfigService";
+
 export const TasksWidget = () => {
 	const [error, setError] = useState("");
 	const [count, setCount] = useState(0);
 	const [inProgressCount, setInProgressCount] = useState(0);
 	const [dueSoonCount, setDueSoonCount] = useState(0);
-	
+
 
 
 	useEffect(() => {
 
 		const divisionId = sessionStorage.getItem("divisionId");
 		const now = new Date()
-		const threshold = globalConfigService.getValue("app_thresholdDue") as number;
-		const dueDays = new Date().setDate(now.getDate() - threshold);
+		const threshold = config.getValue("app_thresholdDue") as number;
+
 
 		task.countAllTasks(divisionId)
 			.then(resolve => setCount(resolve))
@@ -32,9 +31,11 @@ export const TasksWidget = () => {
 
 					if (x.status == 1) setInProgressCount(inProgressCount + 1);
 
-					const deadline = new Date(parseInt(x.deadline, 10) * 1000).getDate();
-					if (deadline >= dueDays && deadline <= now.getDate()) {
-						setDueSoonCount(dueSoonCount + 1);	
+					const deadline = new Date(parseInt(x.deadline, 10) * 1000).getDate()
+					const dueDays = deadline - now.getDate()
+					if (dueDays <= threshold && dueDays >= 0) {
+						console.log(x.title)
+						setDueSoonCount(dueSoonCount + 1);
 					}
 				});
 			})
@@ -45,7 +46,6 @@ export const TasksWidget = () => {
 
 			});
 
-		console.log(globalConfigService.getAllConfig())
 	}, []);
 
 	return (
@@ -55,19 +55,21 @@ export const TasksWidget = () => {
 				{error && <p className="alert alert-danger">{error}</p>}
 
 
-				<div className="row">
-					<div className="col">
+				<div className="hstack gap-3">
+					<div className="mx-auto">
 
 						<p>Total Tasks</p>
 						<p className="fs-1">{count}</p>
 
 					</div>
-					<div className="col">
+					<div className="vr"></div>
+					<div className="mx-auto">
 						<p>In Progress</p>
 						<p className="fs-1 text-primary">{inProgressCount}</p>
 
 					</div>
-					<div className="col">
+					<div className="vr"></div>
+					<div className="mx-auto">
 						<p>Due Soon</p>
 						<p className="fs-1 text-danger">{dueSoonCount}</p>
 
@@ -77,57 +79,76 @@ export const TasksWidget = () => {
 		</div>
 	)
 
-} 
+}
 
 
 export const ProgressWidget = () => {
 
 	const [error, setError] = useState();
 	const [tasks, setTasks] = useState<Task[]>([]);
+	const [subTaskCount, setSubTaskCount] = useState(0);
+	const [completeSubTaskCount, setCompleteSubTaskCount] = useState(0);
+	const [subtaskProgress, setSubtaskProgress] = useState<number[]>([0]);
 
 	useEffect(() => {
 		const divisionId = sessionStorage.getItem('divisionId');
-		api.get<Task[]>("/tasks/divisions?id=" + divisionId).then( (response) => {
+		api.get<Task[]>("/tasks/division?id=" + divisionId).then((response) => {
 			setTasks(response.data);
 		})
-		.catch( error => {
-			setError(error);
-		});
+			.catch(error => {
+				setError(error);
+			});
 
+		tasks.map((taskObj, index) => {
+			setSubTaskCount(0); setCompleteSubTaskCount(0);
+			subtask.countAllSubtasks(taskObj.id).then(resolve => setSubTaskCount(resolve))
+				.catch((error: any) => { setError(error) });
 
-		tasks.map((task, index) => {
-			const total = await subtask.countAllTasks(task.id);
+			subtask.getAllSubtasks(taskObj.id).then(resolve => {
+				resolve.forEach((subtask) => {
 
+					if (subtask.status == 2) {
+						setCompleteSubTaskCount(completeSubTaskCount + 1);
+					}
+
+				})
+			})
+				.catch((error: any) => { setError(error) });
+
+			setSubtaskProgress([...subtaskProgress, (completeSubTaskCount / subTaskCount) * 100])
+			console.log(completeSubTaskCount, subTaskCount);
 		})
+
+		console.log(subtaskProgress)
+
 
 	}, []);
 
 
 	return (
-		<div className="card card-body text-center d-flex flex-column gap-3">
+		<div className="card">
+			<div className="card-header p-3"><h4 className="card-title">Tasks Progresses</h4></div>
+			<div className="card-body text-center d-flex flex-column gap-3">
 
 				{error && <p className="alert alert-danger">{error}</p>}
 
 				<ul className="list-group">
-                        {tasks.map((task, index) => (
-                            <li key={index} className="list-group-item">
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <span>{task.title}</span>
-                                    <span>{task.}%</span>
-                                </div>
-                                <div className="progress mt-2">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        style={{ width: `${task.progress}%` }}
-                                        aria-valuenow={task.progress}
-                                        aria-valuemin="0"
-                                        aria-valuemax="100"
-                                    ></div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+					{tasks.map((task, index) => (
+						<li key={index} className="list-group-item">
+							<div className="d-flex justify-content-between align-items-center">
+								<span>{task.title}</span>
+								<span>{subtaskProgress[index]}%</span>
+							</div>
+							<div className="progress mt-2">
+								<div className="progress-bar"
+									role="progressbar"
+									style={{ width: `${subtaskProgress[index]}%` }}
+								></div>
+							</div>
+						</li>
+					))}
+				</ul>
+			</div>
 		</div>
 	)
 }

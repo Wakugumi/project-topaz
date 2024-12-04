@@ -1,8 +1,7 @@
-import axios from "axios";
 import { Worker } from '../types/Worker';
 import api from './APIService';
 
-export default WorkerService = {
+const WorkerService = {
 	async getAllWorkers() {
 		try {
 			const response = await api.get<Worker[]>("/workers");
@@ -15,7 +14,7 @@ export default WorkerService = {
 
 	async getWorkerById(id: string) {
 		try {
-			const response = await.api.get<Worker>("/workers?id=" + id);
+			const response = await api.get<Worker>("/workers?id=" + id);
 			return response.data;
 
 		} catch (error) {
@@ -30,5 +29,22 @@ export default WorkerService = {
 		} catch (error) {
 			console.error("WorkerService: " + error);
 		}
+	},
+
+	/**
+		* get staffs
+	* @param divisionId the Id of the division
+	* @returns Worker[] arrays of workers
+	*/
+	async getStaffs(divisionId: string | null) {
+		return api.get<Worker[]>('/workers/division-role?divisionId=' + divisionId + '&roleId=66ffb0edd22f347f278dd855')
+			.then(resolve => {
+				return resolve.data;
+			})
+			.catch(error => {
+				throw new Error(error || "Unknown error @ WorkerService");
+			});
 	}
 }
+
+export default WorkerService;

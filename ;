@@ -1,0 +1,57 @@
+import axios from 'axios';
+import apiService from './APIService';
+import { Token } from '../types/Token';
+import { Login } from '../types/Worker';
+import { write } from '@popperjs/core';
+
+const AuthService = {
+	/**
+		* Authenticate the current session
+	* The token returned from server is added in browser session storage
+	* @returns Promise<Token>
+	**/
+	login(form: Login | null): Promise<Token> {
+
+		return axios.post<Token>(import.meta.env.API_URL + "/workers/login", {
+			username: form?.email, password: form?.password
+		}).then((val) => {
+
+			if (val.status == 200) {
+				sessionStorage.setItem("token", JSON.stringify(val.data));
+			}
+
+			return val.data;
+
+		}).catch(error => {
+			console.error('AuthService.tsx: ' + error);
+			throw new Error(error.response.data?.message || 'An error occured while logging in');
+		});
+
+
+	},
+
+
+	/**
+		* Helper function. Checks if the sessions store a token
+	* @returns boolean
+	**/
+	isAuthenticated() {
+		const token = sessionStorage.getItem("token");
+
+
+		return token && token !== '';
+
+	},
+
+	getUser() {
+		const api = apiService.getInstance()
+		api.get("workers/auth").then(resolve => {
+			return resolve.data
+		}).catch(reject => {
+			throw new Error(reject.message)
+		});
+	}
+
+}
+
+export default AuthService;

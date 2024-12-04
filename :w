@@ -1,0 +1,72 @@
+import axios from 'axios';
+import api from './APIService';
+import { Token } from '../types/Token';
+import { Login, Worker } from '../types/Worker';
+
+const AuthService = {
+	/**
+		* Authenticate the current session
+	* The token returned from server is added in browser session storage
+	* @returns Promise<Token>
+	**/
+	login(form: Login | null): Promise<Token> {
+		console.log(form);
+		const payload = {
+			"username": form?.email,
+			"password": form?.password
+		}
+		console.log(payload)
+		return api.post<Token>("/workers/login/", JSON.stringify(payload))
+			.then(resolve => {
+				if (resolve.status == 200) {
+
+					sessionStorage.setItem("token", JSON.stringify(resolve.data));
+
+				}
+
+				return resolve.data;
+			})
+			.catch(reject => {
+
+				console.error('AuthService.tsx: ' + reject);
+				throw new Error(reject.respone.data?.message || 'Error while logging in');
+
+			});
+
+
+	},
+
+
+	/**
+		* Logout current user
+	* @returns void
+	*/
+	logout() {
+		if (this.isAuthenticated()) {
+			sessionStorage.removeItem("token");
+			sessionStorage.removeItem("username");
+		}
+	},
+
+
+	/**
+		* Helper function. Checks if the sessions store a token
+	* @returns boolean
+	**/
+	isAuthenticated() {
+		const token = sessionStorage.getItem("token");
+
+
+		return token && token !== '';
+
+	},
+
+	async getUser<Worker>() {
+		return api.get<Worker>("workers/auth").then((resolve) => {
+			return resolve.data;
+		}).catch(error => { throw new Error(error) });
+	}
+
+}
+
+export default AuthService;

@@ -8,7 +8,7 @@ function Sidebar() {
 
 	return (
 		<>
-			<div className="sidebar px-3">
+			<div className="sidebar px-3 bg-transparent text-light">
 				<div className="sidebar-sticky d-flex flex-column gap-3">
 
 					<div className="mb-3">

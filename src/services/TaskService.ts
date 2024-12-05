@@ -1,5 +1,6 @@
 import api from './APIService';
 import { Task } from '../types/Task';
+import SubTaskService from './SubTaskService';
 
 
 const TaskService = {
@@ -61,6 +62,42 @@ const TaskService = {
 			.catch(error => {
 				throw new Error(error || "Unknown error @ TaskService");
 			});
+
+	},
+
+	async updateTaskStatus(taskId: string, taskStatus: number) {
+		return await api.put<Task>("tasks/" + taskId, { status: taskStatus })
+		.then(resolve => {
+			return resolve.data;
+		})
+		.catch(error => {
+            throw new Error(error || "Unknown error @ TaskService");
+        });
+	
+	},
+
+	async syncTaskStatus(taskId: string | null) {
+		let n : number = await SubTaskService.countAllSubtasks(taskId)
+		await SubTaskService.getSubtasks(taskId)
+			.then( (resolve) => {
+				if (resolve.filter(task => task.status == 2).length / n == 1) {
+					this.updateTaskStatus(taskId as string, 2)
+				} else {
+					this.updateTaskStatus(taskId as string, 1)
+				}
+				
+				if (resolve.filter(task => task.status == 0).length == n) {
+					this.updateTaskStatus(taskId as string, 0)
+				}
+
+				if(resolve.filter(task => task.status == 1).length > 0) {
+					this.updateTaskStatus(taskId as string, 1)
+				}
+			})
+			.catch(error => {
+				throw new Error(error || "Unknown error @ TaskService");
+			}
+			);
 
 	}
 

@@ -27,10 +27,8 @@ export const TasksWidget = () => {
 
 		task.getTasks(divisionId)
 			.then(resolve => {
+				setInProgressCount(resolve.filter((x) => x.status == 1).length);
 				resolve.forEach((x) => {
-
-					if (x.status == 1) setInProgressCount(inProgressCount + 1);
-
 					const deadline = new Date(parseInt(x.deadline, 10) * 1000).getDate()
 					const dueDays = deadline - now.getDate()
 					if (dueDays <= threshold && dueDays >= 0) {
@@ -88,7 +86,7 @@ export const ProgressWidget = () => {
 	const [tasks, setTasks] = useState<Task[]>([]);
 	const [subTaskCount, setSubTaskCount] = useState(0);
 	const [completeSubTaskCount, setCompleteSubTaskCount] = useState(0);
-	const [subtaskProgress, setSubtaskProgress] = useState<number[]>([0]);
+	const [subtaskProgress, setSubtaskProgress] = useState<number[]>([100, 25, 0]);
 
 	useEffect(() => {
 		const divisionId = sessionStorage.getItem('divisionId');

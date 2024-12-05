@@ -13,7 +13,6 @@ import { Division } from '../types/Division';
 **/
 function IndexPage() {
 	const navigate = useNavigate();
-	const [username, setUsername] = useState("N/A");
 	const [user, setUser] = useState<Worker | null>(null)
 	const [division, setDivision] = useState<Division | null>(null);
 	const [avatar, setAvatar] = useState("");
@@ -22,7 +21,6 @@ function IndexPage() {
 	useLayoutEffect(() => {
 		try {
 			auth.getUser().then((resolve: Worker) => {
-				console.log(resolve); setUsername(resolve?.name);
 				setUser(resolve);
 				setAvatar(
 					`https://ui-avatars.com/api/?name=${encodeURIComponent(resolve?.name)}&background=random`);
@@ -81,13 +79,17 @@ function IndexPage() {
 
 					<div className="col-12">
 
-						<div className="card card-body p-3 d-flex flex-row gap-2">
+						<div className="card card-body p-3 d-flex flex-row align-items-center gap-5">
 
-							<img src={avatar} class="rounded float-start" alt="..."></img>
+							<img src={avatar}
+							className="rounded float-start"
+							style={{ width: '12rem' }}></img>
 
-							<div className="vstack gap-1">
+							<div className="vstack gap-1 justify-content-center">
 								<h4>{user?.name}</h4>
-								<span>Division: {division?.name}</span>
+								<span><span className="text-secondary">Department:</span> {division?.name}</span>
+								<span><span className="text-secondary">Role </span> Division Supervisor <span className="text-secondary">under </span>@Manager</span>
+
 							</div>
 
 
@@ -108,13 +110,14 @@ function IndexPage() {
 								<h4 className="fs-3">Launch</h4>
 							</button>
 
-							<button className="btn btn-outline-primary d-flex flex-column justify-content-center p-3" onClick={() => { navigate('/app/dashboard') }}>
+							{/* <button className="btn btn-outline-primary d-flex flex-column justify-content-center p-3" onClick={() => { navigate('/app/dashboard') }}>
 
 								<span className="material-symbols-outlined w-100" style={{ fontSize: '4rem' }}>
 									settings
 								</span>
 								<h4 className="fs-3">Settings</h4>
-							</button>
+							</button> */}
+
 							<button className="btn btn-outline-danger d-flex flex-column justify-content-center p-3" onClick={handleLogout}>
 
 								<span className="material-symbols-outlined w-100" style={{ fontSize: '4rem' }}>

@@ -8,7 +8,6 @@ export default function DashboardPage() {
 	return (
 
 		<>
-			<div className="container-fluid">
 				<div className="row">
 
 					<div className="d-flex flex-column gap-3">
@@ -17,7 +16,6 @@ export default function DashboardPage() {
 					</div>
 
 				</div>
-			</div>
 
 
 		</>

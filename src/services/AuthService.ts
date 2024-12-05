@@ -6,10 +6,9 @@ import { Navigate } from 'react-router-dom';
 
 const AuthService = {
 	async initUser() {
-		await api.get("workers/auth").then(resolve => {
+		api.get("workers/auth").then(resolve => {
 
 			const data: Worker = resolve.data;
-
 			sessionStorage.setItem("divisionId", data.divisionId);
 			sessionStorage.setItem("name", data.name);
 		}).catch(error => {
@@ -24,11 +23,11 @@ const AuthService = {
 	* @returns Promise<Token>
 	**/
 	async login(form: Login): Promise<Token> {
-
+		console.log("Login", form);
 		return axios.post<Token>(import.meta.env.VITE_API_URL + "workers/login", { "email": form?.email, "password": form?.password })
 			.then(resolve => {
 				if (resolve.status == 200) {
-
+					console.log("Login Resp", JSON.stringify(resolve.data))
 					sessionStorage.setItem("token", JSON.stringify(resolve.data));
 					this.initUser();
 				}
@@ -40,7 +39,7 @@ const AuthService = {
 				console.error('AuthService.tsx: ' + reject);
 				throw new Error(reject.respone.data?.message || 'Error while logging in');
 
-			});
+			})
 
 
 	},

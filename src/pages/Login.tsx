@@ -3,15 +3,19 @@ import { Login } from '../types/Worker'
 import Auth from '../services/AuthService.ts'
 import { useNavigate } from 'react-router-dom';
 
-export default function LoginPage() {
-	const [Form, setLogin] = useState<Login | null>(null);
+interface LoginProp {
+	setIsAuthenticated: (isAuthenticated: boolean) => void;
+}
+
+export default function LoginPage({ setIsAuthenticated }: LoginProp) {
+	const [Form, setForm] = useState<Login>();
 	const [error, setError] = useState<string | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
 
 	const handleForm = (e: any) => {
 		const { name, value } = e.target;
-		setLogin({ ...Form as Login, [name]: value, });
+		setForm({ ...Form as Login, [name]: value, });
 	}
 
 	const handleSubmit = async (e: any) => {
@@ -20,7 +24,8 @@ export default function LoginPage() {
 		e.preventDefault();
 
 		try {
-			await Auth.login(Form);
+			await Auth.login(Form as Login);
+			setIsAuthenticated(true);
 			navigate("/");
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'Unknown error at handling login form submission')
@@ -31,7 +36,7 @@ export default function LoginPage() {
 
 	return (
 		<>
-			<div className="container">
+			<div className="container position-absolute top-50 start-50 translate-middle">
 
 				<div className="row">
 

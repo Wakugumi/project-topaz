@@ -11,13 +11,15 @@ import TasksPage from './pages/TasksPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AuthService from './services/AuthService'
 import TaskDetailPage from './pages/TaskDetailPage'
+import WorkerPage from './pages/WorkerPage'
+import SubtaskPage from './pages/SubtaskPage'
+import TaskPage from './pages/TaskPage'
 
 function App() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useLayoutEffect(() => {
-		console.log(AuthService.isAuthenticated())
 		setIsAuthenticated(AuthService.isAuthenticated())
 
 		const loadConfig = async () => {
@@ -43,14 +45,17 @@ function App() {
 				<Routes>
 					<Route path='/' element={<ProtectedRoute isAuthenticated={isAuthenticated} > <IndexPage /> </ProtectedRoute>} />
 					<Route path='/welcome' element={<WelcomePage />} />
-					<Route path='/login' element={<LoginPage />} />
+					<Route path='/login' element={<LoginPage setIsAuthenticated={setIsAuthenticated}/>} />
 					<Route path='/app' element={<ProtectedRoute isAuthenticated={isAuthenticated}> <AppPage /> </ProtectedRoute>}>
 
 						<Route path="dashboard" element={<DashboardPage />} />
-						<Route path="tasks" element={<TasksPage />} >
-
+						<Route path="tasks" element={<TasksPage />} />
+						<Route path="task" element={<TaskPage />}>
+						    <Route path="detail" element={<TaskDetailPage />} />
+							<Route path="item" element={<SubtaskPage />} />
 						</Route>
-						<Route path="taskDetail" element={<TaskDetailPage />} />
+
+						<Route path="workers" element={<WorkerPage />}></Route>
 					</Route>
 				</Routes>
 

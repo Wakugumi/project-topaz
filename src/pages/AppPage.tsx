@@ -6,39 +6,39 @@ import configService from "../services/ConfigService";
 
 export default function AppPage() {
 
-	useLayoutEffect(() => {
-		configService.loadConfig().then(() => {
-			console.log("Config loaded");
-		}).catch(() => {
-			console.log("Error loading config");
-		})
-	}, []);
+  useLayoutEffect(() => {
+    configService.loadConfig().then(() => {
+      console.log("Config loaded");
+    }).catch(() => {
+      console.log("Error loading config");
+    })
+  }, []);
 
-	return (
+  return (
 
-		<>
-			<div className="container-fluid py-3 bg-light">
-				<div className="row">
-					<div className="col-lg-3">
-						<Sidebar />
-					</div>
+    <>
+      <div className="container-fluid py-3 bg-light min-vh-100">
+        <div className="row">
+          <div className="col-lg-3">
+            <Sidebar />
+          </div>
 
-					<div className="col-lg-9">
-						<main className="bg-body rounded-3 py-1 px-3 d-flex flex-column gap-5">
-							<Navbar />
+          <div className="col-lg-9">
+            <main className="bg-body rounded-3 p-4 d-flex flex-column gap-5">
+              <Navbar />
 
-							<Outlet />
+              <Outlet />
 
-						</main>
-					</div>
-				</div>
-			</div>
-
-
-		</>
+            </main>
+          </div>
+        </div>
+      </div>
 
 
-	);
+    </>
+
+
+  );
 
 
 }

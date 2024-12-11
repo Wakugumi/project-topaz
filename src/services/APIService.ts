@@ -4,14 +4,14 @@ import AuthService from './AuthService';
 
 
 const instance = axios.create({
-	baseURL: import.meta.env.VITE_API_URL,
-	headers: {
-		"Content-Type": "application/json",
-		"Accept": "*/*",
-		"Access-Control-Allow-Origin": "*",
-		"Access-Control-Allow-Credentials": "true",
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "*/*",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": "true",
 
-	}
+  }
 });
 
 
@@ -19,21 +19,21 @@ const instance = axios.create({
 
 // Request Interceptor
 instance.interceptors.request.use(
-	(config) => {
-		const rawToken = sessionStorage.getItem('token');
-		const jsonToken = JSON.parse(rawToken as string);
-		const token = jsonToken?.IdToken;
-		const refreshToken = jsonToken?.RefreshToken;
+  (config) => {
+    const rawToken = sessionStorage.getItem('token');
+    const jsonToken = JSON.parse(rawToken as string);
+    const token = jsonToken?.IdToken;
+    const refreshToken = jsonToken?.RefreshToken;
 
-		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;
-			config.headers.set("Refresh-Token", `${refreshToken}`);
-		}
-		return config;
-	},
-	(error) => {
-		return Promise.reject(error);
-	}
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.set("Refresh-Token", `${refreshToken}`);
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 
@@ -46,32 +46,31 @@ instance.interceptors.request.use(
  * 
  */
 instance.interceptors.response.use(
-	(response) => {
-		if (response.status == 200) {
-			const token = response.data?.token;
-			const data = response.data?.data;
+  (response) => {
+    if (response.status == 200) {
+      const token = response.data?.token;
+      const data = response.data?.data;
 
-			response.data = data
+      response.data = data
 
-			if (token != null || token != undefined) {
-				sessionStorage.setItem("token", JSON.stringify(token));
-			}
-		}
+      if (token != null || token != undefined) {
+        sessionStorage.setItem("token", JSON.stringify(token));
+      }
+    }
 
-		else if (response.status == 401) {
-			AuthService.logout()
-		}
+    else if (response.status == 401) {
+      AuthService.logout()
+    }
 
-		return response;
-	},
-	(error) => {
-		if (error.response?.status == 401 || error.status == 401) {
-			console.error('Unauthorized access - maybe redirect to login');
-			AuthService.logout()
-		}
+    return response;
+  },
+  (error) => {
+    if (error.response?.status == 401 || error.status == 401) {
+      console.error('Unauthorized access - maybe redirect to login');
+    }
 
-		return Promise.reject(error);
-	}
+    return Promise.reject(error);
+  }
 );
 
 export default instance;

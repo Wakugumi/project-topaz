@@ -62,7 +62,8 @@ const TaskService = {
       .catch(error => {
         throw new Error(error || "Unknown error @ TaskService");
       });
-  }
+  },
+
 }
 
 export default TaskService;

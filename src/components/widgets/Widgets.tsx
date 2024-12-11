@@ -102,26 +102,6 @@ export const ProgressWidget = () => {
         setError(error?.message)
       })
 
-    tasks.map((taskObj, index) => {
-      setSubTaskCount(0); setCompleteSubTaskCount(0);
-      subtask.countAllSubtasks(taskObj.id).then(resolve => setSubTaskCount(resolve))
-        .catch((error: any) => { setError(error) });
-
-      subtask.getAllSubtasks(taskObj.id).then(resolve => {
-        resolve.forEach((subtask) => {
-
-          if (subtask.status == 2) {
-            setCompleteSubTaskCount(completeSubTaskCount + 1);
-          }
-
-        })
-      })
-        .catch((error: any) => { setError(error?.message) });
-
-      setSubtaskProgress([...subtaskProgress, (completeSubTaskCount / subTaskCount) * 100])
-      console.log(completeSubTaskCount, subTaskCount);
-    })
-
     console.log(subtaskProgress)
 
 
@@ -140,12 +120,12 @@ export const ProgressWidget = () => {
             <li key={index} className="list-group-item">
               <div className="d-flex justify-content-between align-items-center">
                 <span>{task.title}</span>
-                <span>{subtaskProgress[index]}%</span>
+                <span>{task.progress}%</span>
               </div>
               <div className="progress mt-2">
                 <div className="progress-bar"
                   role="progressbar"
-                  style={{ width: `${subtaskProgress[index]}%` }}
+                  style={{ width: `${task.progress}%` }}
                 ></div>
               </div>
             </li>

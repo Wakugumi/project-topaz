@@ -48,14 +48,14 @@ const SubTaskService = {
     * @return SubTask, the newly created subtask
     */
   async createSubTask(data: CreateSubTask, task: Task) {
-    const deadline = new Date(data.deadline);
+    const deadline = new Date(data.dueDate);
     deadline.setHours(23);
     deadline.setMinutes(59);
     deadline.setSeconds(59);
-    data.deadline = deadline.getTime().toString();
+    data.dueDate = deadline.getTime().toString();
 
     let subTaskId = "";
-    return await api.post<SubTask>('/subtasks', { data: data, taskId: task.id })
+    return await api.post<SubTask>('/subtasks', data)
       .then((response) => { subTaskId = response.data.id })
       .catch((error) => {
         throw new Error(error || "Unknown error @ SubTaskService");
@@ -70,17 +70,22 @@ const SubTaskService = {
    * @throws Error
    */
   async getSubtask(subtaskId: string | null) {
-    return api.get<SubTask>('/subtasks?id=' + subtaskId)
+    return api.get<SubTask[]>('/subtasks?id=' + subtaskId)
       .then((resolve) => {
-        return resolve.data;
+        return resolve.data[0];
       })
       .catch((error) => {
         throw new Error(error || "Unknown error @ SubTaskService");
       });
   },
 
-  async updateSubtask(subtaskId: string | null, payload: UpdateSubTask, taskId: string | null) {
+  async updateSubtask(subtaskId: string | null, payload: UpdateSubTask) {
     console.log("reveived payload to update subtask", payload)
+    await api.put<SubTask>('/subtasks/' + subtaskId + '?status=' + payload.status, payload)
+      .then(() => { })
+      .catch(error => {
+        throw new Error(error || "Unknown error @ SubTaskService");
+      })
     return api.put<SubTask>('/subtasks/' + subtaskId, payload)
       .then((resolve) => {
         return resolve.data;

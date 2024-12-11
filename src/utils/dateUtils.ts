@@ -4,9 +4,10 @@
  * @returns A JavaScript Date object.
  */
 export function convertUnixToDate(unixTime: number | string): Date {
-	const timestamp = typeof unixTime === 'string' ? parseInt(unixTime, 10) : unixTime;
+  const timestamp = typeof unixTime === 'string' ? parseInt(unixTime, 10) : unixTime;
 
-	// If timestamp is in seconds, convert it to milliseconds.
-	return new Date(timestamp < 1e12 ? timestamp * 1000 : timestamp);
+
+  // If timestamp is in seconds, convert it to milliseconds.
+  return new Date(timestamp < 1e12 ? timestamp * 1000 : timestamp);
 }
 

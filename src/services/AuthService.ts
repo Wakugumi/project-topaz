@@ -6,14 +6,12 @@ import { Navigate } from 'react-router-dom';
 
 const AuthService = {
   async initUser() {
-    api.get("workers/auth").then(resolve => {
 
-      const data: Worker = resolve.data;
-      sessionStorage.setItem("divisionId", data.divisionId);
-      sessionStorage.setItem("name", data.name);
-    }).catch(error => {
-      console.error(error || "Unknown error initializing user @ AuthService");
-    });
+    const user = sessionStorage.getItem("user")
+    const data: Worker = JSON.parse(user as string)
+    sessionStorage.setItem("divisionId", data.divisionId);
+    sessionStorage.setItem("name", data.name);
+    sessionStorage.setItem("user", JSON.stringify(data));
   },
 
 
@@ -23,12 +21,11 @@ const AuthService = {
   * @returns Promise<Token>
   **/
   async login(form: Login): Promise<Token> {
-    console.log("Login", form);
-    return axios.post<Token>(import.meta.env.VITE_API_URL + "workers/login", { "email": form?.email, "password": form?.password })
+    return axios.post(import.meta.env.VITE_API_URL + "users/login", { "email": form?.email, "password": form?.password })
       .then(resolve => {
         if (resolve.status == 200) {
-          console.log("Login Resp", JSON.stringify(resolve.data))
-          sessionStorage.setItem("token", JSON.stringify(resolve.data));
+          sessionStorage.setItem("token", JSON.stringify(resolve.data.token));
+          sessionStorage.setItem("user", JSON.stringify((resolve.data.data)));
           this.initUser();
         }
 

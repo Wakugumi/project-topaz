@@ -17,13 +17,13 @@ export default function AppPage() {
   return (
 
     <>
-      <div className="container-fluid py-3 bg-light min-vh-100">
+      <div className="container-fluid py-3 bg-body min-vh-100">
         <div className="row">
-          <div className="col-lg-3">
+          <div className="col-lg-2">
             <Sidebar />
           </div>
 
-          <div className="col-lg-9">
+          <div className="col-lg-10">
             <main className="bg-body rounded-3 p-4 d-flex flex-column gap-5">
               <Navbar />
 

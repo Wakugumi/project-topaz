@@ -114,34 +114,46 @@ function IndexPage() {
                 </button>
               </div>
             </div>
-          </div>
+          </div >
+          <div className="card card-body p-3 d-flex flex-row align-items-center gap-5">
 
+            <img src={avatar}
+              className="rounded float-start"
+              style={{ width: '12rem' }}></img>
 
-          <div className="col-6 d-flex flex-column justify-content-center align-items-center gap-4">
-            <div className="d-flex">
-              <Clock />
+            <div className="vstack gap-1 justify-content-center">
+              <h4>{user?.name}</h4>
+              <span><span className="text-secondary">Department:</span> {division?.name}</span>
+              <span><span className="text-secondary">Role </span> Division Supervisor <span className="text-secondary">under </span>@Manager</span>
+
             </div>
 
-            <div className="d-flex flex-row gap-2">
 
-              <img src={avatar} className="rounded float-start" alt="..."></img>
+            <div className="col-6 d-flex flex-column justify-content-center align-items-center gap-4">
+              <div className="d-flex">
+                <Clock />
+              </div>
 
-              <div className="vstack gap-1">
-                <h4>{user?.name}</h4>
-                <span>Division: {division?.name}</span>
+              <div className="d-flex flex-row gap-2">
+
+                <img src={avatar} className="rounded float-start" alt="..."></img>
+
+                <div className="vstack gap-1">
+                  <h4>{user?.name}</h4>
+                  <span>Division: {division?.name}</span>
+                </div>
+
+
               </div>
 
 
             </div>
 
-
           </div>
-
         </div>
-      </div >
+      </div>
     </>
-
   );
-
 }
+
 export default IndexPage;

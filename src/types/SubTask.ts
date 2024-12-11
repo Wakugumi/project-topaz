@@ -24,14 +24,14 @@ export interface CreateSubTask {
     title: string;
     description: string;
     workerIds: string[];
-    Deadline: string;
+    deadline: string;
 }
 
 export interface UpdateSubTask {
-    id: string;
-    title: string;
-    description: string;
-    workerIds: string[];
-    status: number;
-    deadline: string;
+    id?: string;
+    title?: string;
+    description?: string;
+    workerIds?: string[];
+    status?: number;
+    deadline?: string;
 }

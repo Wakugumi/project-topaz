@@ -47,7 +47,7 @@ instance.interceptors.request.use(
  */
 instance.interceptors.response.use(
   (response) => {
-    if (response.status == 200) {
+    if (response.status == 200 || response.status == 201) {
       const token = response.data?.token;
       const data = response.data?.data;
 

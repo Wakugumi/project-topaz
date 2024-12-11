@@ -1,5 +1,6 @@
 import api from './APIService';
 import { Task } from '../types/Task';
+import SubTaskService from './SubTaskService';
 
 
 const TaskService = {
@@ -61,9 +62,7 @@ const TaskService = {
       .catch(error => {
         throw new Error(error || "Unknown error @ TaskService");
       });
-
   }
-
 }
 
 export default TaskService;

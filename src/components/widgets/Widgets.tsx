@@ -32,7 +32,7 @@ export const TasksWidget = () => {
 
           if (x.status == 1) setInProgressCount(inProgressCount + 1);
 
-          const deadline = new Date(parseInt(x.deadline, 10) * 1000).getDate()
+          const deadline = new Date(parseInt(x.dueDate, 10) * 1000).getDate()
           const dueDays = deadline - now.getDate()
           if (dueDays <= threshold && dueDays >= 0) {
             console.log(x.title)
@@ -46,6 +46,15 @@ export const TasksWidget = () => {
         setError(error);
 
       });
+
+    task.getTasksBeforeDue(7, divisionId)
+      .then((response) => {
+        setDueSoonCount(response.length);
+      })
+      .catch(error => {
+        console.error(error);
+        setError(error)
+      })
 
   }, []);
 

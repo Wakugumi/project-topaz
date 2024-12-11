@@ -1,6 +1,7 @@
 import api from './APIService';
 import { Task } from '../types/Task';
 import SubTaskService from './SubTaskService';
+import { convertDateToUnix } from '../utils/dateUtils';
 
 
 const TaskService = {
@@ -63,6 +64,26 @@ const TaskService = {
         throw new Error(error || "Unknown error @ TaskService");
       });
   },
+
+
+  /**
+    * Returns tasks before due 
+    * @param days: number of days before due 
+    * @param divisionId: division's id 
+    * @returns Task[] - array of tasks
+    */
+  async getTasksBeforeDue(days: number, divisionId: string | null) {
+    const due = (days * 86400) + convertDateToUnix(new Date());
+    const date = due.toString();
+
+    return api.get<Task[]>("tasks?dueDate=" + date + "&divisionId=" + divisionId)
+      .then(resolve => {
+        return resolve.data;
+      })
+      .catch(error => {
+        throw new Error(error || "Unknown error @ TaskService");
+      })
+  }
 
 }
 

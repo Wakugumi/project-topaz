@@ -98,7 +98,8 @@ const SubtaskPage = () => {
     SubTaskService.updateSubtask(SubtaskId, payload)
       .then(response => {
         console.log("Update Subtask", response)
-        navigate('/app/task/detail?taskId=' + TaskId);
+        navigate('/app/task/detail?taskId=' + TaskId)
+        window.location.reload()
       })
       .catch(error => {
         setError(error?.message);

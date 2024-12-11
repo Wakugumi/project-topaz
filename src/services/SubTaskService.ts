@@ -80,7 +80,6 @@ const SubTaskService = {
   },
 
   async updateSubtask(subtaskId: string | null, payload: UpdateSubTask) {
-    console.log("reveived payload to update subtask", payload)
     await api.put<SubTask>('/subtasks/' + subtaskId + '?status=' + payload.status, payload)
       .then(() => { })
       .catch(error => {
@@ -91,6 +90,21 @@ const SubTaskService = {
         return resolve.data;
       })
       .catch((error) => {
+        throw new Error(error || "Unknown error @ SubTaskService");
+      })
+  },
+
+  /**
+  * Delete a subtask
+  * @param subtaskId | the subtask's id to delete
+  * @returns SubTask object or thrown error
+  */
+  async deleteSubtask(subtaskId: string | null) {
+    return api.delete('/subtasks/' + subtaskId)
+      .then(resolve => {
+        return resolve.data
+      })
+      .catch(error => {
         throw new Error(error || "Unknown error @ SubTaskService");
       })
   }

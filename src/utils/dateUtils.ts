@@ -11,3 +11,12 @@ export function convertUnixToDate(unixTime: number | string): Date {
   return new Date(timestamp < 1e12 ? timestamp * 1000 : timestamp);
 }
 
+/**
+ * Converts Date object to Unix time
+  * @param date - the Date object
+  * @returns number - Unix in number data type
+  */
+export function convertDateToUnix(date: Date): number {
+  return Math.floor(date.getTime() / 1000);
+
+}

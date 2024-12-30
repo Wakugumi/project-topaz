@@ -16,6 +16,9 @@ const WorkerPage: React.FC = () => {
             setError(error);
         });
     })
+
+    if(error) console.error(error);
+    
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		const value = e.currentTarget.getAttribute('value');

@@ -1,7 +1,5 @@
 import api from './APIService';
 import { CreateSubTask, SubTask, UpdateSubTask } from '../types/SubTask';
-import { Task, UpdateTask } from '../types/Task';
-import TaskService from './TaskService';
 
 const SubTaskService = {
 
@@ -47,16 +45,15 @@ const SubTaskService = {
     * @param data CreateSubTask, the subtask details
     * @return SubTask, the newly created subtask
     */
-  async createSubTask(data: CreateSubTask, task: Task) {
+  async createSubTask(data: CreateSubTask) {
     const deadline = new Date(data.dueDate);
     deadline.setHours(23);
     deadline.setMinutes(59);
     deadline.setSeconds(59);
     data.dueDate = deadline.getTime().toString();
 
-    let subTaskId = "";
     return await api.post<SubTask>('/subtasks', data)
-      .then((response) => { subTaskId = response.data.id })
+      .then((resolve) => { return resolve.data })
       .catch((error) => {
         throw new Error(error || "Unknown error @ SubTaskService");
       });

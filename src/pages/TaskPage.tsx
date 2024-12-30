@@ -1,47 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import { Task } from '../types/Task';
-import { Worker } from '../types/Worker';
 
 import TaskService from '../services/TaskService';
 import { convertUnixToDate } from '../utils/dateUtils';
-import { CreateSubTask, SubTask } from '../types/SubTask';
 import SubTaskService from '../services/SubTaskService';
 import WorkerService from '../services/WorkerService';
 
-interface Data {
-  id: string;
-  name: string;
-  description: string;
-}
-
-const status = {
-  0: "Not Started",
-  1: "In Progress",
-  2: "Completed"
-}
-
-const statusStyle = {
-  0: "secondary",
-  1: "primary",
-  2: "success"
-}
+const status = [
+  "Not Started",
+  "In Progress",
+  "Completed"
+]
+const statusStyle = [
+  "secondary",
+  "primary",
+  "success"
+]
 
 const TaskPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const taskId = searchParams.get('taskId') as string;
-  const navigate = useNavigate();
   const [data, setData] = useState<Task | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [subTasks, setSubTasks] = useState<SubTask[]>([]);
-  const [staffs, setStaffs] = useState<Worker[]>([]);
-  const [Form, setForm] = useState<CreateSubTask>({
-    title: '',
-    description: '',
-    dueDate: "",
-    userIds: [],
-    taskId: taskId
-  });
 
 
 
@@ -51,8 +32,7 @@ const TaskPage: React.FC = () => {
       return;
     }
     SubTaskService.getSubtasks(taskId)
-      .then(result => {
-        setSubTasks(result)
+      .then( () => {
 
       })
       .catch(error => {
@@ -60,8 +40,7 @@ const TaskPage: React.FC = () => {
       });
 
     WorkerService.getStaffs(sessionStorage.getItem("divisionId"))
-      .then(result => {
-        setStaffs(result);
+      .then(() => {
       })
       .catch(error => {
         setError(error);
@@ -70,7 +49,7 @@ const TaskPage: React.FC = () => {
       .then(result => {
         setData(result);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         setError(error);
       });
 

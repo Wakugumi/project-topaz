@@ -1,23 +1,22 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SubTask, UpdateSubTask } from "../types/SubTask";
 import SubTaskService from "../services/SubTaskService";
 import { convertUnixToDate } from "../utils/dateUtils";
 import WorkerService from "../services/WorkerService";
-import { UpdateWorker, Worker } from "../types/Worker";
+import { Worker } from "../types/Worker";
 
 
-const status = {
-  0: "Not Started",
-  1: "In Progress",
-  2: "Completed"
-}
-
-const statusStyle = {
-  0: "body-tertiary",
-  1: "primary",
-  2: "success"
-}
+const status = [
+  "Not Started",
+  "In Progress",
+  "Completed"
+]
+const statusStyle = [
+  "body-tertiary",
+  "primary",
+  "success"
+]
 
 const SubtaskPage = () => {
   const navigate = useNavigate();
@@ -27,7 +26,6 @@ const SubtaskPage = () => {
   const [formDate, setFormDate] = useState<string>("");
   const [formStatus, setFormStatus] = useState<number>(0);
   const [staffs, setStaffs] = useState<Worker[]>([]);
-  const [assignedStaffs, setAssignedStaffs] = useState<Worker[]>([]);
 
   const [dateChanged, setDateChanged] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -79,12 +77,12 @@ const SubtaskPage = () => {
     navigate('/app/task/detail?taskId=' + TaskId);
   }
 
-  const handleDate = (e: any) => {
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormDate(new Date(e.target.value).toISOString().split('T')[0]);
     setDateChanged(true);
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const unixTimestamp = Math.floor(new Date(formDate).getTime() / 1000);
     const payload: UpdateSubTask = {
@@ -107,7 +105,7 @@ const SubtaskPage = () => {
 
   };
 
-  const handleStatus = (e: any) => {
+  const handleStatus = () => {
     const value = document.getElementById('form-status')?.getAttribute('value');
     switch (value) {
       case '0':
@@ -124,7 +122,7 @@ const SubtaskPage = () => {
 
   if (loading) { return <><p>Loading...</p></> }
 
-  if (error) { return <><p className="text-danger">Error: {error?.message}</p></> }
+  if (error) { return <><p className="text-danger">Error: {error}</p></> }
 
   return (
     <>
@@ -180,7 +178,7 @@ const SubtaskPage = () => {
                             justify-content-between
                             ${(dateChanged) ? `bg-body-tertiary` : ''}`}
                 role="button"
-                onClick={() => (document.getElementById('form-due') as any).showPicker()}>
+                onClick={() => (document.getElementById('form-due') as HTMLInputElement).showPicker()}>
 
                 <input type="date" id="form-due"
                   style={{
@@ -202,22 +200,13 @@ const SubtaskPage = () => {
           </div>
         </div>
 
-        <div className="d-flex flex-wrap gap-3">
 
-          {assignedStaffs.map((staff, index) => (
-            <div key={index} className="bg-body-tertiary
-                        px-3 py-2 rounded-pill shadow text-center">
-              {staff.name}
-            </div>
-          ))}
 
-        </div>
-
-        <div className="d-flex">
-          <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
+        <form className="d-flex" onSubmit={handleSubmit}>
+          <button type="submit" className="btn btn-primary">
             Update
           </button>
-        </div>
+        </form>
       </div >
     </>
   )

@@ -13,13 +13,12 @@ const WorkerService = {
   },
 
   async getWorkerById(id: string) {
-    try {
-      const response = await api.get<Worker>("/users?id=" + id);
-      return response.data;
-
-    } catch (error) {
-      throw new Error(error);
-    }
+    api.get<Worker>("/users?id=" + id).then( resolve => {
+      return resolve.data
+    })
+    .catch( error => {
+      throw new Error(error || "Unknown error @ WorkerService");
+    })
   },
 
   async createWorker(data: Worker) {

@@ -15,39 +15,36 @@ import Clock from '../components/Clock';
 **/
 function IndexPage() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("N/A");
-  const [user, setUser] = useState<Worker | null>(null)
+  const [user, setUser] = useState<Worker>();
   const [division, setDivision] = useState<Division | null>(null);
   const [avatar, setAvatar] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>("");
 
   useLayoutEffect(() => {
     try {
-      auth.getUser().then((resolve: Worker) => {
-        setUsername(resolve?.name);
-        setUser(resolve);
-        setAvatar(generateURL(resolve?.name))
+      auth.getUser().then((resolve) => {
+        setUser(resolve as Worker);
+        setAvatar(generateURL((resolve as Worker)?.name))
       }
       )
         .catch((error) => { setError(error) });
 
 
     }
-    catch (error: any) {
+    catch (error) {
 
-      setError(error)
+      setError(error as string)
 
     } finally {
       DivisionService.getDivision(sessionStorage.getItem('divisionId'))
         .then((resolve: Division) => { setDivision(resolve); console.log(resolve) })
-        .catch((error: any) => { setError(error) });
+        .catch((error) => { setError(error) });
 
 
     }
   }, [])
 
-  const handleLogout = (e: any) => {
-    e.preventDefault();
+  const handleLogout = () => {
     AuthService.logout();
     navigate("/welcome");
   }

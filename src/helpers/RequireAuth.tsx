@@ -1,13 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { isAuthenticated } from '../services/AuthService';
+import AuthService from '../services/AuthService';
 
-export default RequireAuth({ Component }) {
+interface RequireAuthProps {
+	Component: React.FC
+}
+
+const RequireAuth = ({ Component } : RequireAuthProps) => {
 	const navigate = useNavigate();
 
-	if (isAuthenticated()) {
+	if (AuthService.isAuthenticated()) {
 		return <Component />;
 	} else {
 		navigate("/login");
 	}
 }
+
+export default RequireAuth;

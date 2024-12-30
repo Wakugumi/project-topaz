@@ -5,7 +5,7 @@ import IndexPage from './pages/IndexPage'
 import WelcomePage from './pages/WelcomePage'
 import DashboardPage from './pages/DashboardPage'
 import AppPage from './pages/AppPage'
-import { useLayoutEffect, useState, useEffect } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import globalConfigService from './services/ConfigService'
 import TasksPage from './pages/TasksPage'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -16,7 +16,7 @@ import SubtaskPage from './pages/SubtaskPage'
 import TaskPage from './pages/TaskPage'
 
 function App() {
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useLayoutEffect(() => {

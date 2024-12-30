@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import { useEffect, useLayoutEffect } from "react"
+import { useLayoutEffect } from "react"
 import configService from "../services/ConfigService";
 
 export default function AppPage() {

@@ -13,12 +13,12 @@ export default function LoginPage({ setIsAuthenticated }: LoginProp) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
 
-	const handleForm = (e: any) => {
-		const { name, value } = e.target;
+	const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target as HTMLInputElement;
 		setForm({ ...Form as Login, [name]: value, });
 	}
 
-	const handleSubmit = async (e: any) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		setIsSubmitting(true);
 
 		e.preventDefault();

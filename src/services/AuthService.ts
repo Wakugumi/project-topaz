@@ -1,8 +1,6 @@
 import axios from 'axios';
-import api from './APIService';
 import { Token } from '../types/Token';
 import { Login, Worker } from '../types/Worker';
-import { Navigate } from 'react-router-dom';
 
 const AuthService = {
   async initUser() {
@@ -57,13 +55,13 @@ const AuthService = {
     * Helper function. Checks if the sessions store a token
   * @returns boolean
   **/
-  isAuthenticated() {
+  isAuthenticated() : boolean {
     const token = sessionStorage.getItem("token");
-    return token && token !== '';
+    return (token && token !== '') as boolean;
 
   },
 
-  async getUser<Worker>() {
+  async getUser<Worker>() : Promise<Worker> {
 
     const data = JSON.parse(sessionStorage.getItem('user') as string);
     return data as Worker;

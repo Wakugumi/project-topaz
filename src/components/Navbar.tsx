@@ -14,12 +14,11 @@ function Navbar() {
       `https://ui-avatars.com/api/?name=${encodeURIComponent(sessionStorage.getItem("name") as string)}&background=random`);
 
     setName(sessionStorage.getItem("name") as string);
-  })
+  }, [])
 
 
 
-  const handleShutdown = (e: any) => {
-    e.preventDefault();
+  const handleShutdown = () => {
     navigate("/");
   }
 

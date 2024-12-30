@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Task } from '../types/Task';
 import { Worker } from '../types/Worker';
 
@@ -9,23 +9,20 @@ import { CreateSubTask, SubTask } from '../types/SubTask';
 import SubTaskService from '../services/SubTaskService';
 import WorkerService from '../services/WorkerService';
 
-interface Data {
-  id: string;
-  name: string;
-  description: string;
-}
 
-const status = {
-  0: "Not Started",
-  1: "In Progress",
-  2: "Completed"
-}
 
-const statusStyle = {
-  0: "secondary",
-  1: "primary",
-  2: "success"
-}
+const status = [
+  "Not Started",
+  "In Progress",
+  "Completed"
+]
+const statusStyle = [
+  "secondary",
+  "primary",
+  "success"
+]
+
+
 
 const TaskDetailPage: React.FC = () => {
 
@@ -36,7 +33,6 @@ const TaskDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [subTasks, setSubTasks] = useState<SubTask[]>([]);
   const [staffs, setStaffs] = useState<Worker[]>([]);
-  const [reload, setReload] = useState(1);
   const [Form, setForm] = useState<CreateSubTask>({
     taskId: id,
     title: '',
@@ -72,10 +68,10 @@ const TaskDetailPage: React.FC = () => {
       .then(result => {
         setData(result);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         setError(error);
       });
-  }, [id, reload])
+  }, [id])
 
   if (error) {
     return <p className="text-danger">Error: {error}</p>;
@@ -109,8 +105,8 @@ const TaskDetailPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setForm({ ...Form, taskId: Form?.taskId, title: Form?.title || '', description: Form?.description || '', dueDate: Form?.dueDate || '', userIds: Form?.userIds });
-    await SubTaskService.createSubTask(Form, data)
-      .then(result => {
+    await SubTaskService.createSubTask(Form)
+      .then(() => {
         window.location.reload()
       })
       .catch(error => {
@@ -140,7 +136,7 @@ const TaskDetailPage: React.FC = () => {
                   <div className="d-flex w-100 justify-content-between">
 
                     < h5 className="mb-1" > {item.title} </h5>
-                    <small className={`badge text-bg-${statusStyle[item?.status.toString()]} my-auto`}> {status[item.status.toString()]} </small>
+                    <small className={`badge text-bg-${statusStyle[item?.status]} my-auto`}> {status[item.status]} </small>
                   </div>
                   <p className="mb-1 text-truncate" style={{ maxWidth: "75%" }}> {item.description} </p>
                   <small className="text-secondary"> Issued at {convertUnixToDate(item.issueDate).toLocaleString()}</small>

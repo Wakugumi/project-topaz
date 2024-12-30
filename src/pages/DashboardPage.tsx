@@ -1,7 +1,4 @@
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
 import { ProgressWidget, TasksWidget } from "../components/widgets/Widgets";
-import { Worker } from "../types/Worker";
 
 export default function DashboardPage() {
 

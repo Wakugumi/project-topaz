@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 import AuthService from './AuthService';
 
 
@@ -67,7 +67,10 @@ instance.interceptors.response.use(
   (error) => {
     if (error.response?.status == 401 || error.status == 401) {
       console.error('Unauthorized access - maybe redirect to login');
+      AuthService.logout()
+
     }
+    AuthService.logout()
 
     return Promise.reject(error);
   }

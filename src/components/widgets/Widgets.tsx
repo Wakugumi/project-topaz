@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import task from '../../services/TaskService';
-import subtask from '../../services/SubTaskService';
 
-import api from '../../services/APIService';
 import { Task } from '../../types/Task';
 import config from "../../services/ConfigService";
 import TaskService from "../../services/TaskService";
+import { Link } from "react-router-dom";
 
 export const TasksWidget = () => {
   const [error, setError] = useState("");
@@ -67,10 +66,10 @@ export const TasksWidget = () => {
 
         <div className="hstack gap-3">
           <div className="mx-auto">
-
+            <Link to="/app/tasks" className="btn btn-dark">
             <p>Total Tasks</p>
             <p className="fs-1">{count}</p>
-
+            </Link>
           </div>
           <div className="vr"></div>
           <div className="mx-auto">
@@ -96,9 +95,6 @@ export const ProgressWidget = () => {
 
   const [error, setError] = useState();
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [subTaskCount, setSubTaskCount] = useState(0);
-  const [completeSubTaskCount, setCompleteSubTaskCount] = useState(0);
-  const [subtaskProgress, setSubtaskProgress] = useState<number[]>([0]);
 
   useEffect(() => {
     const divisionId = sessionStorage.getItem('divisionId');
@@ -111,7 +107,6 @@ export const ProgressWidget = () => {
         setError(error?.message)
       })
 
-    console.log(subtaskProgress)
 
 
   }, []);

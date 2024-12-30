@@ -1,6 +1,5 @@
 import api from './APIService';
 import { Task } from '../types/Task';
-import SubTaskService from './SubTaskService';
 import { convertDateToUnix } from '../utils/dateUtils';
 
 
@@ -11,11 +10,11 @@ const TaskService = {
   * @returns Array of tasks typeof ReturnTask
   */
   async getAllTasks() {
-    return api.get<Task[]>("tasks").then((response: any) => {
+    return api.get<Task[]>("tasks").then((response) => {
 
       return response.data;
 
-    }).catch((error: any) => {
+    }).catch((error) => {
 
       throw new Error(error || "Unknown error @ TaskService");
 

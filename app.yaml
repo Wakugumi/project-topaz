@@ -1,0 +1,19 @@
+runtime: nodejs18
+handlers:
+  - url: /static
+    static_dir: dist
+
+  - url: /assets/(.*\.js)
+    static_files: dist/assets/\1
+    upload: dist/assets/.*\.js
+    http_headers:
+      Content-Type: application/javascript
+
+
+  - url: /assets/(.*\.css)
+    static_files: dist/assets/\1
+    upload: dist/assets/.*\.css
+
+  - url: /.*  
+    static_files: dist/index.html
+    upload: dist/index.html

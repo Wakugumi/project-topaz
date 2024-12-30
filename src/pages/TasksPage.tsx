@@ -2,19 +2,19 @@ import React, { useState, useLayoutEffect } from 'react';
 import { Task } from '../types/Task';
 import TaskService from '../services/TaskService';
 import { convertUnixToDate } from '../utils/dateUtils';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const status = {
-  0: "Not Started",
-  1: "Progress",
-  2: "Completed"
-}
+const status = [
+  "Not Started",
+  "Progress",
+  "Completed"
+]
 
-const statusStyle = {
-  0: "secondary",
-  1: "primary",
-  2: "success"
-}
+const statusStyle = [
+  "secondary",
+  "primary",
+  "success"
+]
 
 export default function TasksPage() {
   const navigate = useNavigate();
@@ -30,7 +30,10 @@ export default function TasksPage() {
         setError(error);
       });
 
+
   }, []);
+
+  if(error)         console.error(error);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
